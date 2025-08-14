@@ -123,6 +123,45 @@ If the IDs differ, you may need to **manually update** the values in the Python 
 
 </details>
 
+## 🚗 Run Autoware on ARM AVA Unit
+
+
+<details>
+<summary>Click to expand</summary>
+
+> **IMPORTANT:**  
+> This Docker container and instructions are **only compatible with the legacy version of the Actuation Demo** provided by ARM, which relies on the message converter architecture.  
+>  
+> This setup does **NOT** support the latest Autoware versions or newer Actuation Demo releases.
+
+The provided Docker image:
+
+- Is **built for ARM architecture** to run on ARM-based hosts like the ARM Automotive Development System (AVA unit).  
+- **Will NOT run on x86_64 hosts** (typical Intel/AMD desktop or laptop CPUs).
+
+---
+
+### How to run
+
+We provide a helper script `files/run_autoware_docker.sh` to start the Docker container with X11 forwarding enabled and automatically handle downloading map data and launching the Autoware simulation.
+
+Usage:
+
+```bash
+chmod +x launch_autoware_actuation_demo_docker.sh
+./launch_autoware_actuation_demo_docker.sh
+```
+
+This script performs the following steps:
+
+- Enables X11 forwarding on the host (necessary for GUI applications inside Docker).
+- Starts the Docker container with proper environment variables and volume mounts for X11 and authentication.
+- Checks for the sample map inside the container and downloads/unzips it if missing.
+- Sources the ROS 2 workspace inside the container.
+- Launches the Autoware planning simulator with the sample vehicle and sensor models.
+
+</details>
+
 ## 📦 Provided Files
 
 <details>
@@ -137,6 +176,7 @@ This repository includes:
   This file was compiled for the ARM Cortex-R board (revision D) and confirmed to work in practice.
 
 - An additional `arm_ethernet.overlay` file for enabling Ethernet routing on the ARM platform.
+- A helper script `run_autoware_docker.sh` to start the Autoware Docker container (with Message converter)
 
 </details>
 
