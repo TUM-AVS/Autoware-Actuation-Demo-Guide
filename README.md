@@ -160,6 +160,34 @@ This script performs the following steps:
 - Sources the ROS 2 workspace inside the container.
 - Launches the Autoware planning simulator with the sample vehicle and sensor models.
 
+### Alternative - Manually Run Autoware Docker on ARM AVA 
+
+> This guide shows how to manually start the Docker container, forward X11 for GUI applications, download the sample map, and launch the Autoware simulation — all from the command line.
+
+```bash
+sudo xhost local:root
+
+docker run -it \
+  --net host \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -v "${HOME}/.Xauthority:${HOME}/.Xauthority:rw" \
+  -e XAUTHORITY="${HOME}/.Xauthority" \
+  -e DISPLAY="${DISPLAY}" \
+  ghcr.io/tum-avs/autoware-actuation-demo-guide:running
+
+mkdir -p ~/autoware_map
+gdown -O ~/autoware_map/sample-map-planning.zip 'https://docs.google.com/uc?export=download&id=1499_nsbUbIeturZaDj7jhUownh5fvXHd'
+unzip -d ~/autoware_map ~/autoware_map/sample-map-planning.zip
+
+cd /actuation-demo/
+source install/setup.bash
+
+ros2 launch actuation_demos planning_simulator.launch.xml \
+  map_path:=$HOME/autoware_map/sample-map-planning \
+  vehicle_model:=sample_vehicle \
+  sensor_model:=sample_sensor_kit
+```
+
 </details>
 
 ## 📦 Provided Files
